@@ -1,0 +1,12 @@
+{
+  "servers": {
+    "OnionData-MCP": {
+      "type": "http",
+      "url": "https://api.onionreport.com/mcp",
+      "headers": { "Authorization": "Bearer ${input:oniondataToken}" }
+    }
+  },
+  "inputs": [
+    { "type": "promptString", "id": "oniondataToken", "description": "Bearer token for oniondata", "password": true }
+  ]
+}

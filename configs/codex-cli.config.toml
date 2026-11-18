@@ -1,0 +1,3 @@
+[mcp_servers.OnionData-MCP]
+url = "https://api.onionreport.com/mcp"
+bearer_token_env_var = "ONIONDATA_TOKEN"

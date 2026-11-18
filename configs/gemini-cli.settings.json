@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "OnionData-MCP": {
+      "httpUrl": "https://api.onionreport.com/mcp",
+      "headers": { "Authorization": "Bearer <TOKEN>" }
+    }
+  }
+}

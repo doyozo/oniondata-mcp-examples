@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "OnionData-MCP": {
+      "type": "streamableHttp",
+      "url": "https://api.onionreport.com/mcp",
+      "headers": { "Authorization": "Bearer ${ONIONDATA_TOKEN}" }
+    }
+  }
+}
