@@ -17,4 +17,4 @@
 | `postman.md` | Postman（API 工具） | UI MCP request + `postman mcp` CLI；API Network 发布规则待核实 |
 | `generic.mcp.json` | 通用客户端 | 仅 `url` + `headers`；不支持变量的客户端替换 `<TOKEN>` |
 
-校验方式：配置完成后让客户端列出 MCP 工具，能看到 `search_companies` / `company_records` / `get_usage` 六个工具即表示连接成功。
+校验方式：配置完成后让客户端列出 MCP 工具，能看到 12 个工具（`search_companies` / `company_records` / `get_usage` 等 6 个原子工具 + 6 个场景工具）即表示连接成功。

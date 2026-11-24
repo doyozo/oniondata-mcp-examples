@@ -46,11 +46,11 @@ postman mcp inspect --url https://api.onionreport.com/mcp -H "Authorization:Bear
 参数说明：
 
 - `-H "key:value"`：添加 HTTP 头；`Authorization` 头会替换保存的 MCP request 中继承的鉴权。
-- `--no-login`：禁止触发 OAuth 登录。本服务当前未开通 OAuth，建议显式加上。
+- `--no-login`：禁止触发 OAuth 登录。已配置 Bearer 令牌时可显式加上，避免误触发 OAuth 流程。
 - `--protocol-version auto`（默认）：先尝试 `2026-07-28`，失败回退 legacy，与本服务的 dual-era 版本声明匹配。
 - 退出码 `3` 表示服务器要求凭据（401/403），优先检查令牌是否有效、受众是否为 `mcp`。
 
 ## 验证标准
 
-- `Tools` tab 或 `postman mcp tools list` 能看到 6 个工具：`search_companies` / `list_report_periods` / `list_indicators` / `get_dimensions` / `company_records` / `get_usage`。
+- `Tools` tab 或 `postman mcp tools list` 能看到 12 个工具：6 个原子工具（`search_companies` / `list_report_periods` / `list_indicators` / `get_dimensions` / `company_records` / `get_usage`）+ 6 个场景工具（`get_company_trend` / `get_company_compare` / `get_company_sort` / `get_quarter_yoy_trend` / `get_quarter_qoq_trend` / `get_ttm_qoq_trend`）。
 - `get_usage` 返回档位、积分余额与日调用护栏信息。

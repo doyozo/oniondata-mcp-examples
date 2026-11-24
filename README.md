@@ -20,7 +20,9 @@
 
 ## MCP 工具
 
-服务提供 6 个工具，其中只有 `company_records` 计积分，其余免费；积分耗尽后 `get_usage` 仍可用。
+注册用户可见 12 个工具（6 个原子工具 + 6 个场景工具）；匿名用户可见 6 个工具（4 个发现工具 + `start_trial` + 受限的 `company_records`）。完整清单以 `tools/list` 返回为准。
+
+### 原子工具
 
 | 工具 | 功能 | 是否计积分 |
 | --- | --- | --- |
@@ -28,23 +30,39 @@
 | `list_report_periods` | 查询公司可用报告期，确定数据时间范围 | 否 |
 | `list_indicators` | 获取指标 key 到中文名的映射及单位字典，与公司无关，无需传 `scode` | 否 |
 | `get_dimensions` | 获取报表、口径与指标的机器可读字典（中文名 / 单位 / repotype），取数前先确认可用指标 | 否 |
-| `company_records` | 唯一取数工具，读取利润表、资产负债表、现金流量表与业绩预告的底层数值 | 是 |
+| `company_records` | 统一取数工具：1 个 `scode` 为单公司多期，2–10 个 `scode` 为多公司单期横切 | 是 |
 | `get_usage` | 查询当前档位、积分余额与日调用护栏的上限 / 已用 / 剩余 / 重置时间 | 否 |
 
-推荐调用顺序：用户给出公司名或代码 → `search_companies` 确认 `scode` → `list_report_periods` 确定报告期 → `list_indicators` / `get_dimensions` 确认指标 → `company_records` 取数 → 用户问余额或遇积分报错时用 `get_usage`。
+### 场景化工具（仅注册用户可用）
+
+| 工具 | 功能 | 是否计积分 |
+| --- | --- | --- |
+| `get_company_trend` | 公司业绩诊断：自动探测业绩预告（有则前置）并给出正式数据双口径事实与信号 | 是（数据点） |
+| `get_company_compare` | 2–10 家公司对比：经典五项指标双口径横向对齐 | 是（数据点） |
+| `get_company_sort` | 业绩榜单：16 个榜单（同比/环比/毛利率/绝对值/连续四期增长）前十 | 是（每榜单固定 20 积分） |
+| `get_quarter_yoy_trend` | 单季度同比趋势 | 是（数据点） |
+| `get_quarter_qoq_trend` | 单季度环比趋势 | 是（数据点） |
+| `get_ttm_qoq_trend` | TTM 环比趋势（无同比，只看环比） | 是（数据点） |
+
+### 匿名试用
+
+未配置令牌时，可先调 `start_trial` 获取匿名试用 handle，再以受限条件调用 `company_records` 体验取数（有效期 24 小时、最多 10 次成功调用或累计 100 积分）。详见 `skills/oniondata/SKILL.md`。
+
+推荐调用顺序：用户给出公司名或代码 → `search_companies` 确认 `scode` → `list_report_periods` 确定报告期 → `list_indicators` / `get_dimensions` 确认指标 → `company_records` 取数（或直接使用场景工具）→ 用户问余额或遇积分报错时用 `get_usage`。
 
 ### `company_records` 关键参数
 
 | 参数 | 取值 | 说明 |
 | --- | --- | --- |
 | `scode` | 6 位证券代码数组，1–10 个，必填 | 1 个为单公司多期；2–10 个为多公司单期横切 |
-| `reponame` | `income` / `balance` / `cashflow` / `predict`，必填 | 每次只能传一个报表 |
+| `reponame` | `income` / `balance` / `cashflow` / `predict`，必填 | 多张报表用逗号分隔，最多 4 个，如 `income,balance` |
 | `repoterm` | `quarter_t` / `quarter_h` / `ttm` / `year` / `new`，必填 | 决定增长口径，见下表 |
 | `repotype` | `basic` / `operation` | 按指标目录细分该报表，可省略 |
 | `periods` | 1–10，默认 1 | 仅单公司可用；多公司传会报 `dimension_conflict` |
 | `report_date` | 指定单期 | 单公司时与 `periods` 互斥；多公司省略时取最近报告期 |
 | `repoitem_key` | 指标 key 数组 | 省略则返回该报表全部指标，建议显式指定以节省积分 |
 | `format` | `long` / `wide`，默认 `long` | `long` 一行一指标，`wide` 一行一（公司, 报告期, 报表） |
+| `trial_handle` | 匿名试用 handle | 无令牌时须先调 `start_trial` 并传回；已配置令牌时忽略 |
 
 ### 五种口径
 
@@ -167,7 +185,7 @@ openclaw mcp probe oniondata --json
 
 ### Cursor（B 类）
 
-配置在 `mcp.json`。远程 Server 用 `url` + `headers`，支持 `${env:ONIONDATA_TOKEN}` 插值。模板见 `configs/cursor.mcp.json`。验证：Customize 页面显示已连接、六个工具可见，调用 `get_usage` 成功。
+配置在 `mcp.json`。远程 Server 用 `url` + `headers`，支持 `${env:ONIONDATA_TOKEN}` 插值。模板见 `configs/cursor.mcp.json`。验证：Customize 页面显示已连接、12 个工具可见，调用 `get_usage` 成功。
 
 官方：`https://cursor.com/docs/mcp`
 
@@ -203,13 +221,13 @@ postman mcp tools call get_usage --url https://api.onionreport.com/mcp -H "Autho
 
 无论哪类客户端，配置完成后都按这三步验证：
 
-1. 列出 MCP 工具，能看到 6 个工具。
+1. 列出 MCP 工具，能看到 12 个工具（6 个原子工具 + 6 个场景工具）。
 2. 调用 `get_usage`，确认令牌、鉴权与积分链路正常。
 3. 调用一次 `search_companies` 或 `company_records`，确认取数正常。
 
 ## Skill 使用
 
-`skills/oniondata/SKILL.md` 是一个通用 Skill 示例，说明六个工具的用途、调用顺序、参数口径、返回值解读和常见错误。把它复制到你的 AI 工具或 Agent 的 Skill 目录即可按需调整。
+`skills/oniondata/SKILL.md` 是一个通用 Skill 示例，说明各工具（6 个原子工具 + 6 个场景工具 + 匿名试用）的用途、调用顺序、参数口径、返回值解读和常见错误。把它复制到你的 AI 工具或 Agent 的 Skill 目录即可按需调整。
 
 ## 免责声明
 
