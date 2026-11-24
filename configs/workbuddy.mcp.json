@@ -1,6 +1,6 @@
 {
   "mcpServers": {
-    "OnionData-MCP": {
+    "OnionData Financial MCP": {
       "type": "streamableHttp",
       "url": "https://api.onionreport.com/mcp",
       "headers": { "Authorization": "Bearer ${ONIONDATA_TOKEN}" }

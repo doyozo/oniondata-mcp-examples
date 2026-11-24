@@ -1,0 +1,14 @@
+{
+  "mcp": {
+    "servers": {
+      "OnionData Financial MCP": {
+        "url": "https://api.onionreport.com/mcp",
+        "transport": "streamable-http",
+        "headers": { "Authorization": "Bearer <TOKEN>" },
+        "connectionTimeoutMs": 5000,
+        "requestTimeoutMs": 30000,
+        "supportsParallelToolCalls": true
+      }
+    }
+  }
+}
