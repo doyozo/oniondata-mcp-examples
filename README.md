@@ -125,16 +125,16 @@ mcp-examples/
 
 ## 接入场景分类
 
-接入方式按宿主形态分为六类。注意：**AI 终端 / CLI Agent 的“CLI”**是终端里运行的编码 Agent；**平台 Connector 的“CLI + Skill”**是提交到 WorkBuddy 的连接器方案，两者不是一回事。
+接入方式按宿主形态分为六类。注意：**AI 终端 / CLI Agent 的“CLI”**指终端里运行的编码 Agent；**平台 Connector** 指平台托管的连接器，两者不是一回事。
 
-| 类别 | 含义 | 客户端 | 状态 |
-| --- | --- | --- | --- |
-| A. AI 终端 / CLI Agent | 终端里运行的编码 Agent，直连远程 MCP | Claude Code、Codex CLI、Gemini CLI、OpenCode V2、OpenClaw | 已有 4 类；OpenClaw 本版新增 |
-| B. IDE / 编辑器插件 | 图形 IDE 内的 Agent，靠插件或 JSON 配置 | Cursor、TRAE、VS Code + Copilot、Cline、WorkBuddy/CodeBuddy | 已有；Cline 本版新增 |
-| C. 平台 Connector | 平台托管的连接器包，提交后由平台管理鉴权 | WorkBuddy Token Connector（已提交）；OAuth Connector（暂缓）；MCP Registry（后续） | 部分落地 |
-| D. API 工具 / 调试目录 | 非 Agent 宿主，用于连接测试、能力检查、接口发现 | Postman MCP request + `postman mcp` CLI；Postman API Network | 本版新增 |
-| E. 通用 MCP 客户端 | 无专属模板的客户端，用通用 `url` + `headers` | generic | 已有 |
-| F. Skill / Agent 说明层 | 非连接通道，跨所有宿主复用的工具说明 | `skills/oniondata/SKILL.md` | 已有 |
+| 类别 | 含义 | 客户端 |
+| --- | --- | --- |
+| A. AI 终端 / CLI Agent | 终端里运行的编码 Agent，直连远程 MCP | Claude Code、Codex CLI、Gemini CLI、OpenCode V2、OpenClaw |
+| B. IDE / 编辑器插件 | 图形 IDE 内的 Agent，靠插件或 JSON 配置 | Cursor、TRAE、VS Code + Copilot、Cline、WorkBuddy/CodeBuddy |
+| C. 平台 Connector | 平台托管的连接器包，由平台管理鉴权 | 依具体平台而定 |
+| D. API 工具 / 调试目录 | 非 Agent 宿主，用于连接测试、能力检查、接口发现 | Postman MCP request + `postman mcp` CLI；Postman API Network |
+| E. 通用 MCP 客户端 | 无专属模板的客户端，用通用 `url` + `headers` | generic |
+| F. Skill / Agent 说明层 | 非连接通道，跨所有宿主复用的工具说明 | `skills/oniondata/SKILL.md` |
 
 配置机制矩阵：
 
